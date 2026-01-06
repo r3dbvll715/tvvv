@@ -47,13 +47,19 @@
     </footer>
 
     <script>
-        const playlistUrl = 'https://m3upt.com/iptv';
+        const playlistUrl = 'https://raw.githubusercontent.com/LITUATUI/M3UPT/main/M3U/M3UPT.m3u';
         const channelList = document.getElementById('channel-list');
         const videoPlayer = videojs('player');
 
+        console.log('Fetching playlist from:', playlistUrl);
+
         fetch(playlistUrl)
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok: ' + response.statusText);
+                return response.text();
+            })
             .then(data => {
+                console.log('Playlist fetched successfully, length:', data.length);
                 const lines = data.split('\n');
                 let ul = document.createElement('ul');
                 let currentChannel = null;
